@@ -11,6 +11,10 @@ from keyboard import (
     MovementEvent
     )
 
+from mouse import (
+    MouseEvent
+    )
+
 from drawable import Drawable
 
 # represents a player...not necessarily ours though!
@@ -37,6 +41,15 @@ class Player(HandlesEvents, Drawable):
 class HumanPlayer(Player):
     def __init__(self, character, color, location):
         super(HumanPlayer, self).__init__(character, color, location)
+        self.events.append(MouseEvent)
+
+    def handle_event(self, event):
+        super(HumanPlayer, self).handle_event(event)
+
+        if isinstance(event, MouseEvent):
+            loop = get_loop()
+            print event
+            loop.enqueue(ProjectileCreationEvent(self.location, event.payload.pos, self))
 
 class AIPlayer(Player):
     def __init__(self, character, color, location):

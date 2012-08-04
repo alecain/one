@@ -26,7 +26,7 @@ class ProjectileCreationHandler(HandlesEvents):
 class Projectile(Drawable, HandlesEvents):
     def __init__(self, location, slope, string):
         Drawable.__init__(self, string, (255, 255, 255), location, 12)
-        HandlesEvent.__init__(self, [])
+        HandlesEvents.__init__(self, [])
 
         self.location = location
         self.slope = slope
