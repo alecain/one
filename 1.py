@@ -7,6 +7,8 @@ from event import (
     )
 from keyboard import KeyboardHandler
 
+import player
+
 from locals import *
 
 def main():
@@ -19,6 +21,9 @@ def main():
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
     loop.add_object(WASDHandler(player))
+    loop.add_object(player.HumanPlayer("0", (255, 0, 0), (0, 0)))
+
+>>>>>>> player
     while True:
         loop.tick()
 
