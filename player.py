@@ -5,6 +5,7 @@ from locals import *
 
 from event import (
     HandlesEvents,
+    UpdateEvent
     )
 
 from keyboard import (
@@ -59,3 +60,8 @@ class HumanPlayer(Player):
 class AIPlayer(Player):
     def __init__(self, character, color, location):
         super(AIPlayer, self).__init__(character, color, location)
+        self.events.append(UpdateEvent)
+    def handle_event(self, event):
+      if isinstance(event,UpdateEvent):
+         print 'ai update'
+      super(AIPlayer, self).handle_event(event)
