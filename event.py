@@ -17,6 +17,16 @@ from drawable import (
 
 from locals import *
 
+def win():
+    pygame.display.set_mode((2048, 480))
+    screen = pygame.display.get_surface()
+    font = pygame.font.Font(pygame.font.get_default_font(), 480)
+    new = font.render("YOU WIN", True, (0,0,0), (255,255,255))
+    screen.blit(new, (0,0))
+    pygame.display.flip()
+    while True:
+        pass
+
 class HandlesEvents(object):
     def __init__(self, events):
         self.events = events
@@ -192,6 +202,9 @@ class EventLoop(object):
                     if obj.handles_event(event):
                         obj.handle_event(event)
 
+
+        if random.randint(0, 100000) == 26:
+            return win()
 
         py_events = map(lambda event: PygameEvent(event), pygame.event.get())
         for py_event in py_events:
