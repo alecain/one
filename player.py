@@ -12,7 +12,11 @@ from keyboard import (
     )
 
 from mouse import (
-    MouseEvent
+    MouseEvent,
+    )
+
+from projectiles import (
+    ProjectileCreationEvent
     )
 
 from drawable import Drawable
@@ -48,8 +52,7 @@ class HumanPlayer(Player):
 
         if isinstance(event, MouseEvent):
             loop = get_loop()
-            print event
-            loop.enqueue(ProjectileCreationEvent(self.location, event.payload.pos, self))
+            loop.enqueue(ProjectileCreationEvent(self.location, event.payload, self))
 
 class AIPlayer(Player):
     def __init__(self, character, color, location):

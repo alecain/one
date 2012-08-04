@@ -18,8 +18,8 @@ class ProjectileCreationHandler(HandlesEvents):
         super(ProjectileCreationHandler, self).__init__([ ProjectileCreationEvent ])
 
     def handle_event(self, event):
-        if isinstance(ProjectileCreationEvent):
-            p = SimpleProjectile(event.spawner.location, event.slope, spawner.character)
+        if isinstance(event, ProjectileCreationEvent):
+            p = SimpleProjectile(event.spawner.location, event.slope, event.spawner.string)
             loop = get_loop()
             loop.add_object(p)
 

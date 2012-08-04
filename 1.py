@@ -8,6 +8,7 @@ from event import (
     QuitHandler
     )
 from keyboard import WASDHandler
+from mouse import MouseHandler
 
 import player
 from projectiles import ProjectileCreationHandler
@@ -29,6 +30,7 @@ def main():
     loop.add_object(WASDHandler(p))
     loop.add_object(p)
     loop.add_object(ProjectileCreationHandler())
+    loop.add_object(MouseHandler())
 
     while True:
         loop.tick()
