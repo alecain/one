@@ -114,8 +114,8 @@ class CleanupHandler(HandlesEvents):
                 if member in group:
                     group.remove(member)
             for sprite in group:
-                print sprite
                 loop.rm_object(sprite)
+            pygame.sprite.groupcollide(loop.projectiles, loop.enemies, True, True)
         
 
 class EventLoop(object):
