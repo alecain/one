@@ -25,7 +25,7 @@ class ProjectileCreationHandler(HandlesEvents):
         if isinstance(event, ProjectileCreationEvent):
             p = SimpleProjectile(event.spawner.location, event.angle, event.spawner.string)
             loop = get_loop()
-            loop.add_object(p)
+            loop.add_object(p, "projectile")
 
 class Projectile(Drawable, HandlesEvents):
     def __init__(self, location, angle, string):
