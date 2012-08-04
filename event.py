@@ -72,24 +72,34 @@ class PygameEvent(Event):
 
 class EventLoop(object):
     def __init__(self):
-        self.objs = []
+        self.objs = {}
         self.events = []
         self.render = RenderUpdates()
 
-        # Since we don't care about mouse move, we're not going to accept it
+        # Since we don't care about MOST EVENTS
         pygame.event.set_allowed(None)
         pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT ])
 
     def add_object(self, obj):
         if isinstance(obj, HandlesEvents):
-            self.objs.append(obj)
+            if obj.events == ALL:
+                try:
+                    self.objs[ALL].append(obj)
+                except KeyError:
+                    self.objs[ALL] = [ obj ]
+            else:
+                for event in obj.events:
+                    try:
+                        self.objs[event].append(obj)
+                    except KeyError:
+                        self.objs[event] = [ obj ]
         if isinstance(obj, Sprite):
             self.render.add(obj)
 
     def enqueue(self, event):
         if isinstance(event, Event):
             self.events.append(event)
-        if isinstance(event, list):
+        elif isinstance(event, list):
             for ev in event:
                 self.enqueue(event)
 
@@ -100,7 +110,7 @@ class EventLoop(object):
             event = None
 
         if event is not None:
-            for obj in self.objs:
+            for obj in self.objs[type(event)] + self.objs[ALL]:
                 if not isinstance(event, TargettedEvent) and obj.handles_event(event):
                     obj.handle_event(event)
                 elif isinstance(event, TargettedEvent):
