@@ -24,7 +24,6 @@ def main():
     loop.add_object(QuitHandler())
     loop.add_object(WASDHandler(p))
     loop.add_object(p)
-    print loop
 
     while True:
         loop.tick()

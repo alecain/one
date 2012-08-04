@@ -18,6 +18,7 @@ class Player(HandlesEvents, DirtySprite):
     def __init__(self, character, color, location):
         HandlesEvents.__init__(self, [])
         DirtySprite.__init__(self)
+        self.events.append(MovementEvent)
 
         self.character = character
         self.color = color
@@ -51,7 +52,6 @@ class Player(HandlesEvents, DirtySprite):
 class HumanPlayer(Player):
     def __init__(self, character, color, location):
         super(HumanPlayer, self).__init__(character, color, location)
-        self.events.append(MovementEvent)
 
 class AIPlayer(Player):
     def __init__(self, character, color, location):
