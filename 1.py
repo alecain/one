@@ -26,7 +26,7 @@ def main():
     pygame.key.set_repeat(50, 50)
 
     pygame.time.set_timer(REDRAWEVENT,16)
-    pygame.time.set_timer(UPDATEEVENT,30)
+    pygame.time.set_timer(UPDATEEVENT, UPDATE_TIME)
 
     p = player.HumanPlayer("0", (255, 0, 0), (0, 0))
     e = player.AIPlayer("1", (0,0,255), (100,100))
