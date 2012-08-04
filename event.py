@@ -10,7 +10,7 @@ class HandlesEvents(object):
         self.events = events
 
     def handles_event(self, event):
-        return (self.events == ALL or event.get_type() in self.events)
+        return (self.events == ALL or type(event) in self.events)
 
     def handle_event(self, event):
         pass
@@ -24,7 +24,7 @@ class PrintHandler(HandlesEvents):
 
 class PygameHandler(HandlesEvents):
     def __init__(self, pygame_type):
-        super(PygameHandler, self).__init__(PYGAME)
+        super(PygameHandler, self).__init__([ PygameEvent ])
         self.pygame_type = pygame_type
 
     def handles_event(self, event):
@@ -41,18 +41,18 @@ class QuitHandler(PygameHandler):
         sys.exit(0)   
 
 class Event(object):
-    def __init__(self, event_type):
-        self.event_type = event_type
+    def __init__(self, payload):
+        self.payload = payload
 
     def __str__(self):
-        return self.event_type
+        return self.payload
 
-    def get_type(self):
-        return self.event_type
+    def get_payload(self):
+        return self.payload
 
-class TargettedEvent(object):
-    def __init__(self, target):
-        super(TargettedEvent, self).__init__(TARGETTED)
+class TargettedEvent(Event):
+    def __init__(self, payload, target):
+        super(TargettedEvent, self).__init__(payload)
         self.target = target
 
     def get_target(self):
@@ -60,12 +60,11 @@ class TargettedEvent(object):
 
 class PygameEvent(Event):
     def __init__(self, event):
-        super(PygameEvent, self).__init__(PYGAME)
+        super(PygameEvent, self).__init__(event)
         self.pygame_type = event.type
-        self.pygame_event = event
 
     def __str__(self):
-        return "{0} {1}".format(super(PygameEvent, self).__str__(), self.pygame_event)
+        return "{0} {1}".format(super(PygameEvent, self).__str__(), self.payload)
 
 class EventLoop(object):
     def __init__(self):
@@ -90,8 +89,8 @@ class EventLoop(object):
             event = None
 
         for obj in self.objs:
-            if event is not None and event.get_type() != TARGETTED and obj.handles_event(event):
+            if event is not None and not isinstance(event, TargettedEvent) and obj.handles_event(event):
                 obj.handle_event(event)
-            elif event is not None and event.get_type() == TARGETTED:
+            elif event is not None and isinstance(event, TargettedEvent):
                 event.get_target().handle_event(event)
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
