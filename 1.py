@@ -5,6 +5,7 @@ from event import (
     PrintHandler,
     QuitHandler
     )
+from keyboard import KeyboardHandler
 
 from locals import *
 
@@ -17,6 +18,7 @@ def main():
 
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
+    loop.add_object(WASDHandler(player))
     while True:
         loop.tick()
 
