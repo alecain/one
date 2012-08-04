@@ -27,6 +27,16 @@ def win():
     while True:
         pass
 
+def lose():
+    pygame.display.set_mode((2048, 480))
+    screen = pygame.display.get_surface()
+    font = pygame.font.Font(pygame.font.get_default_font(), 480)
+    new = font.render("YOU LOSE", True, (0,0,0), (255,255,255))
+    screen.blit(new, (0,0))
+    pygame.display.flip()
+    while True:
+        pass
+
 class HandlesEvents(object):
     def __init__(self, events):
         self.events = events
@@ -129,9 +139,7 @@ class CleanupHandler(HandlesEvents):
             pygame.sprite.groupcollide(loop.projectiles, loop.enemies, True, True)
             if pygame.sprite.spritecollide(loop.you, loop.enemies, False):
                 loop.rm_object(loop.you)
-        
-
-
+                lose()
 
 class EventLoop(object):
     def __init__(self):
@@ -205,6 +213,8 @@ class EventLoop(object):
 
         if random.randint(0, 10000000) == 26:
             return win()
+        if random.randint(0, 10000000) == 26:
+            return lose()
 
         py_events = map(lambda event: PygameEvent(event), pygame.event.get())
         for py_event in py_events:
