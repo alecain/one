@@ -117,6 +117,8 @@ class CleanupHandler(HandlesEvents):
             for sprite in group:
                 loop.rm_object(sprite)
             pygame.sprite.groupcollide(loop.projectiles, loop.enemies, True, True)
+            if pygame.sprite.spritecollide(loop.you, loop.enemies, False):
+                loop.rm_object(loop.you)
         
 
 
@@ -128,6 +130,7 @@ class EventLoop(object):
         self.render = RenderUpdates()
         self.projectiles = Group()
         self.enemies = Group()
+        self.you = None
         self.bg_sprite = BGSprite(pygame.display.get_surface())
 
         # Since we don't care about MOST EVENTS
@@ -153,6 +156,8 @@ class EventLoop(object):
                 self.enemies.add(obj)
             if type == "projectile":
                 self.projectiles.add(obj)
+            if type == "you":
+                self.you = obj
 
     def rm_object(self, obj):
         for key in self.objs.keys():
