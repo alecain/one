@@ -29,7 +29,7 @@ def main():
     pygame.time.set_timer(UPDATEEVENT, UPDATE_TIME)
 
     p = player.HumanPlayer("0", (255, 0, 0), (0, 0))
-    e = player.AIPlayer("1", (0,0,255), (100,100))
+    e = player.AIPlayer("1", (0,0,255), (100,100), p)
 
     loop = get_loop()
     loop.add_object(RedrawHandler())

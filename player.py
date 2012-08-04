@@ -1,4 +1,5 @@
 import pygame
+import math
 from pygame.sprite import DirtySprite
 
 from locals import *
@@ -56,10 +57,43 @@ class HumanPlayer(Player):
         super(HumanPlayer, self).handle_event(event)
 
 class AIPlayer(Player):
-    def __init__(self, character, color, location):
+    def __init__(self, character, color, location, player, mass = 10, maxvel = 4):
         super(AIPlayer, self).__init__(character, color, location)
         self.events.append(UpdateEvent)
+        self.player = player
+        self.vx=0
+        self.vy=0
+        self.mass= float(mass)
+        self.maxvel= float(maxvel)
+        self.force =0
+        self.angle=0
+
+    def calculate_force(self, angle, distance):
+        self.force = max(.1, min(1/distance, 10))
+        self.angle = angle
+
     def handle_event(self, event):
-      if isinstance(event,UpdateEvent):
-         print 'ai update'
-      super(AIPlayer, self).handle_event(event)
+        if isinstance(event,UpdateEvent):
+
+            #calculate distance and angle to player
+            angle = math.atan2(self.player.location[1]-self.location[1],self.player.location[0]-self.location[0])
+            distance = math.sqrt(math.pow(self.location[1]-self.player.location[1],2)+math.pow(self.location[0]-self.player.location[0],2))
+
+            #make moves
+            self.calculate_force(angle,distance)
+            self.vx = self.vx + self.force/self.mass * UPDATE_TIME * math.cos(self.angle)
+            if self.vx > self.maxvel:
+               self.vx = self.maxvel
+            if self.vx < -self.maxvel:
+               self.vx = -self.maxvel
+            self.vy = self.vy + self.force/self.mass * UPDATE_TIME * math.sin(self.angle)
+            if self.vy > self.maxvel:
+               self.vy = self.maxvel
+            if self.vy < -self.maxvel:
+               self.vy = -self.maxvel
+
+            self.location = (self.vx+self.location[0], self.vy+self.location[1])
+
+            self.regen_sprite()
+
+        super(AIPlayer, self).handle_event(event)
