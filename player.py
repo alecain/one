@@ -4,9 +4,12 @@ from pygame.sprite import DirtySprite
 
 from locals import *
 
+import random
+
 from event import (
     HandlesEvents,
-    UpdateEvent
+    UpdateEvent,
+    PygameHandler
     )
 
 from keyboard import (
@@ -63,7 +66,7 @@ class AIPlayer(Player):
         self.player = player
         self.vx=0
         self.vy=0
-        self.mass= float(mass)
+        self.mass= float(mass * (random.random()+1))
         self.maxvel= float(maxvel)
         self.force =0
         self.angle=0
@@ -97,3 +100,13 @@ class AIPlayer(Player):
             self.regen_sprite()
 
         super(AIPlayer, self).handle_event(event)
+
+class SpawnHandler(PygameHandler):
+    def __init__(self, player):
+        super(SpawnHandler, self).__init__(SPAWNEVENT)
+        self.player = player
+    def handle_event(self, event):
+        loop = get_loop()
+        for i in range(1, random.randint(1,5)):
+            e = AIPlayer("1", (0,0,255), (random.randint(1,RESX),random.randint(1,RESY)), self.player)
+            loop.add_object(e)

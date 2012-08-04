@@ -1,5 +1,6 @@
 import itertools
 import sys
+import random
 
 import pygame
 from pygame.locals import *
@@ -97,6 +98,8 @@ class UpdateHandler(PygameHandler):
         loop.enqueue(UpdateEvent(None))
 
 
+
+
 class EventLoop(object):
     def __init__(self):
         self.objs = {}
@@ -105,7 +108,7 @@ class EventLoop(object):
 
         # Since we don't care about MOST EVENTS
         pygame.event.set_allowed(None)
-        pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT, UPDATEEVENT ])
+        pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT, UPDATEEVENT, SPAWNEVENT ])
 
     def add_object(self, obj):
         if isinstance(obj, HandlesEvents):
