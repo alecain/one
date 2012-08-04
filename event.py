@@ -99,14 +99,16 @@ class EventLoop(object):
         except IndexError:
             event = None
 
-        for obj in self.objs:
-            if event is not None and not isinstance(event, TargettedEvent) and obj.handles_event(event):
-                obj.handle_event(event)
-            elif event is not None and isinstance(event, TargettedEvent):
-                event.get_target().handle_event(event)
+        if event is not None:
+            for obj in self.objs:
+                if not isinstance(event, TargettedEvent) and obj.handles_event(event):
+                    obj.handle_event(event)
+                elif isinstance(event, TargettedEvent):
+                    event.get_target().handle_event(event)
+
+            self.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
+            rect_list = self.render.draw(pygame.display.get_surface())
+
+            pygame.display.update(rect_list)
+
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
-
-        self.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
-        rect_list = self.render.draw(pygame.display.get_surface())
-
-        pygame.display.update(rect_list)
