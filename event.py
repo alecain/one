@@ -3,6 +3,8 @@ import sys
 import pygame
 from pygame.locals import *
 
+from locals import *
+
 class HandlesEvents(object):
     def __init__(self, events):
         self.events = events
@@ -90,6 +92,6 @@ class EventLoop(object):
         for obj in self.objs:
             if event is not None and event.get_type() != TARGETTED and obj.handles_event(event):
                 obj.handle_event(event)
-            elif event.get_type() == TARGETTED:
+            elif event is not None and event.get_type() == TARGETTED:
                 event.get_target().handle_event(event)
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
