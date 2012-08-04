@@ -6,12 +6,15 @@ from event import (
     QuitHandler
     )
 
+from locals import *
+
 def main():
+    loop = get_loop()
+
     pygame.init()
     pygame.display.set_mode((640, 480))
     pygame.display.set_caption("1")
 
-    loop = EventLoop()
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
     while True:
