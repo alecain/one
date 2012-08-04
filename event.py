@@ -1,3 +1,4 @@
+import itertools
 import sys
 
 import pygame
@@ -42,7 +43,8 @@ class QuitHandler(PygameHandler):
         super(QuitHandler, self).__init__(QUIT)
 
     def handle_event(self, event):
-        sys.exit(0)   
+        if event.payload.type == QUIT:
+            sys.exit(0)   
 
 class Event(object):
     def __init__(self, payload):
@@ -101,10 +103,9 @@ class EventLoop(object):
 
     def enqueue(self, event):
         if isinstance(event, Event):
-            self.events.append(event)
+            return self.events.append(event)
         elif isinstance(event, list):
-            for ev in event:
-                self.enqueue(event)
+            return [ self.enqueue(ev) for ev in event ]
 
     def tick(self):
         try:
@@ -127,4 +128,7 @@ class EventLoop(object):
 
             pygame.display.update(rect_list)
 
-        map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
+        py_events = map(lambda event: PygameEvent(event), pygame.event.get())
+        for py_event in py_events:
+            for obj in reduce(lambda obj_list, obj: obj_list + obj, map(lambda key: self.objs[key], filter(lambda handler_type: issubclass(handler_type, PygameEvent) if handler_type != ALL else False, self.objs.keys())), []):
+                obj.handle_event(py_event)

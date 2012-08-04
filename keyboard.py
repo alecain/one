@@ -16,6 +16,7 @@ class WASDHandler(PygameHandler):
     def __init__(self, player):
         super(WASDHandler, self).__init__(KEYDOWN)
         self.player = player
+
     def handle_event(self, event):
         loop = get_loop()
         if event.payload.key == K_w:
