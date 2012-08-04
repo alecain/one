@@ -76,6 +76,10 @@ class EventLoop(object):
         self.events = []
         self.render = RenderUpdates()
 
+        # Since we don't care about mouse move, we're not going to accept it
+        pygame.event.set_allowed(None)
+        pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT ])
+
     def add_object(self, obj):
         if isinstance(obj, HandlesEvents):
             self.objs.append(obj)

@@ -3,6 +3,7 @@ import event
 ALL = "ALL"
 
 PLAYER_SIZE = 30
+MOVEMENT_INC = 2
 
 loop = None
 def get_loop():

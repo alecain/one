@@ -1,4 +1,6 @@
 import pygame
+import pygame.key
+
 from event import (
     Event,
     EventLoop,
@@ -12,14 +14,15 @@ import player
 from locals import *
 
 def main():
-    loop = get_loop()
 
     pygame.init()
     pygame.display.set_mode((640, 480))
     pygame.display.set_caption("1")
+    pygame.key.set_repeat(50, 50)
 
     p = player.HumanPlayer("0", (255, 0, 0), (0, 0))
 
+    loop = get_loop()
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
     loop.add_object(WASDHandler(p))
