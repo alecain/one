@@ -19,7 +19,7 @@ def main():
 
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
-    loop.add_object(player.Player("0", (255, 0, 0), (0, 0)))
+    loop.add_object(player.HumanPlayer("0", (255, 0, 0), (0, 0)))
 
     while True:
         loop.tick()

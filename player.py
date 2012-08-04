@@ -7,7 +7,6 @@ from locals import *
 
 from event import (
     HandlesEvents,
-    QuitHandler
     )
 
 # represents a player...not necessarily ours though!
@@ -30,8 +29,19 @@ class Player(HandlesEvents, Sprite):
         self.image = self._gen_surface()
         self.rect = Rect(self.image.get_size(), self.location)
 
+    def toggle(self):
+        if self.character == "0":
+            self.character = "1"
+        else:
+            self.character = "0"
+
+    def shoot(self):
+        self.toggle()
+
 class HumanPlayer(Player):
-    pass
+    def __init__(self, character, color, location):
+        super(HumanPlayer, self).__init__(character, color, location)
 
 class AIPlayer(Player):
-    pass
+    def __init__(self, character, color, location):
+        super(AIPlayer, self).__init__(character, color, location)
