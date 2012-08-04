@@ -131,4 +131,5 @@ class EventLoop(object):
         py_events = map(lambda event: PygameEvent(event), pygame.event.get())
         for py_event in py_events:
             for obj in reduce(lambda obj_list, obj: obj_list + obj, map(lambda key: self.objs[key], filter(lambda handler_type: issubclass(handler_type, PygameEvent) if handler_type != ALL else False, self.objs.keys())), []):
-                obj.handle_event(py_event)
+                if obj.handles_event(py_event):
+                    obj.handle_event(py_event)
