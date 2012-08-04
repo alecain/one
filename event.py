@@ -62,6 +62,9 @@ class TargettedEvent(Event):
     def get_target(self):
         return self.target
 
+    def __str__(self):
+        return "{0} Target: {1}".format(super(TargettedEvent, self).__str__(), self.target)
+
 class PygameEvent(Event):
     def __init__(self, event):
         super(PygameEvent, self).__init__(event)
@@ -110,11 +113,14 @@ class EventLoop(object):
             event = None
 
         if event is not None:
-            for obj in self.objs[type(event)] + self.objs[ALL]:
-                if not isinstance(event, TargettedEvent) and obj.handles_event(event):
+            if isinstance(event, TargettedEvent):
+                event.get_target().handle_event(event)
+                for obj in self.objs[ALL]:
                     obj.handle_event(event)
-                elif isinstance(event, TargettedEvent):
-                    event.get_target().handle_event(event)
+            else:
+                for obj in self.objs[type(event)] + self.objs[ALL]:
+                    if obj.handles_event(event):
+                        obj.handle_event(event)
 
             self.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
             rect_list = self.render.draw(pygame.display.get_surface())
