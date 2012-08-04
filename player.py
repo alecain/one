@@ -53,6 +53,8 @@ class HumanPlayer(Player):
         if isinstance(event, MouseEvent):
             loop = get_loop()
             loop.enqueue(ProjectileCreationEvent(self.location, event.payload, self))
+            self.shoot()
+            self.regen_sprite()
 
 class AIPlayer(Player):
     def __init__(self, character, color, location):
