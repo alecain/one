@@ -75,6 +75,28 @@ class PygameEvent(Event):
     def __str__(self):
         return "{0} {1}".format(super(PygameEvent, self).__str__(), self.payload)
 
+
+class RedrawHandler(PygameHandler):
+    def __init__(self):
+        super(RedrawHandler, self).__init__(REDRAWEVENT)
+    def handle_event(self, event):
+        loop = get_loop()
+        loop.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
+        rect_list = loop.render.draw(pygame.display.get_surface())
+        pygame.display.update(rect_list)
+
+class UpdateEvent(Event):
+    def __init__(self, payload):
+       super(UpdateEvent,self).__init__(payload)
+
+class UpdateHandler(PygameHandler):
+    def __init__(self):
+        super(UpdateHandler, self).__init__(UPDATEEVENT)
+    def handle_event(self, event):
+        loop = get_loop()
+        loop.enqueue(UpdateEvent(None))
+
+
 class EventLoop(object):
     def __init__(self):
         self.objs = {}
@@ -83,7 +105,7 @@ class EventLoop(object):
 
         # Since we don't care about MOST EVENTS
         pygame.event.set_allowed(None)
-        pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT ])
+        pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT, UPDATEEVENT ])
 
     def add_object(self, obj):
         if isinstance(obj, HandlesEvents):
@@ -123,10 +145,6 @@ class EventLoop(object):
                     if obj.handles_event(event):
                         obj.handle_event(event)
 
-            self.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
-            rect_list = self.render.draw(pygame.display.get_surface())
-
-            pygame.display.update(rect_list)
 
         py_events = map(lambda event: PygameEvent(event), pygame.event.get())
         for py_event in py_events:
