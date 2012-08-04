@@ -8,21 +8,21 @@ class HandlesEvents(object):
         self.events = events
 
     def handles_event(self, event):
-        return (self.events == "ALL" or event.get_type() in self.events)
+        return (self.events == ALL or event.get_type() in self.events)
 
     def handle_event(self, event):
         pass
 
 class PrintHandler(HandlesEvents):
     def __init__(self):
-        super(PrintHandler, self).__init__("ALL")
+        super(PrintHandler, self).__init__(ALL)
 
     def handle_event(self, event):
         print event
 
 class PygameHandler(HandlesEvents):
     def __init__(self, pygame_type):
-        super(PygameHandler, self).__init__("pygame")
+        super(PygameHandler, self).__init__(PYGAME)
         self.pygame_type = pygame_type
 
     def handles_event(self, event):
@@ -48,9 +48,17 @@ class Event(object):
     def get_type(self):
         return self.event_type
 
+class TargettedEvent(object):
+    def __init__(self, target):
+        super(TargettedEvent, self).__init__(TARGETTED)
+        self.target = target
+
+    def get_target(self):
+        return target
+
 class PygameEvent(Event):
     def __init__(self, event):
-        super(PygameEvent, self).__init__("pygame")
+        super(PygameEvent, self).__init__(PYGAME)
         self.pygame_type = event.type
         self.pygame_event = event
 
@@ -80,6 +88,8 @@ class EventLoop(object):
             event = None
 
         for obj in self.objs:
-            if event is not None and obj.handles_event(event):
+            if event is not None and event.get_type() != TARGETTED and obj.handles_event(event):
                 obj.handle_event(event)
+            elif event.get_type() == TARGETTED:
+                event.get_target().handle_event(event)
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
