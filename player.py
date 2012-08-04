@@ -49,13 +49,11 @@ class HumanPlayer(Player):
         self.events.append(MouseEvent)
 
     def handle_event(self, event):
-        super(HumanPlayer, self).handle_event(event)
-
         if isinstance(event, MouseEvent):
             loop = get_loop()
             loop.enqueue(ProjectileCreationEvent(self.location, event.payload, self))
             self.shoot()
-            self.regen_sprite()
+        super(HumanPlayer, self).handle_event(event)
 
 class AIPlayer(Player):
     def __init__(self, character, color, location):
