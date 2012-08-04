@@ -123,13 +123,15 @@ class EventLoop(object):
         self.objs = {}
         self.events = []
         self.render = RenderUpdates()
+        self.projectiles = Group()
+        self.enemies = Group()
         self.bg_sprite = BGSprite(pygame.display.get_surface())
 
         # Since we don't care about MOST EVENTS
         pygame.event.set_allowed(None)
         pygame.event.set_allowed([ MOUSEBUTTONDOWN, KEYDOWN, QUIT, UPDATEEVENT ])
 
-    def add_object(self, obj):
+    def add_object(self, obj, type=""):
         if isinstance(obj, HandlesEvents):
             if obj.events == ALL:
                 try:
@@ -144,12 +146,20 @@ class EventLoop(object):
                         self.objs[event] = [ obj ]
         if isinstance(obj, Sprite):
             self.render.add(obj)
+            if type == "enemy":
+                self.enemies.add(obj)
+            if type == "projectile":
+                self.projectiles.add(obj)
 
     def rm_object(self, obj):
         for key in self.objs.keys():
             self.render.remove(obj)
             if obj in self.objs[key]:
                 self.objs[key].remove(obj)
+            if self.projectiles.has(obj):
+                self.projectiles.remove(obj)
+            if self.enemies.has(obj):
+                self.enemies.remove(obj)
             print "Removed {0}".format(obj)
 
     def enqueue(self, event):

@@ -5,12 +5,12 @@ from pygame import *
 from event import (
     CleanupHandler,
     Event,
-    EventLoop,
     PrintHandler,
     QuitHandler,
     RedrawHandler,
     UpdateHandler
     )
+
 from keyboard import WASDHandler
 from mouse import MouseHandler
 
@@ -42,7 +42,7 @@ def main():
     loop.add_object(p)
     loop.add_object(ProjectileCreationHandler())
     loop.add_object(MouseHandler())
-    loop.add_object(e)
+    loop.add_object(e, "enemy")
 
     while True:
         loop.tick()
