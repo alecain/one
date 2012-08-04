@@ -203,7 +203,7 @@ class EventLoop(object):
                         obj.handle_event(event)
 
 
-        if random.randint(0, 100000) == 26:
+        if random.randint(0, 10000000) == 26:
             return win()
 
         py_events = map(lambda event: PygameEvent(event), pygame.event.get())
