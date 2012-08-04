@@ -1,5 +1,4 @@
 import pygame
-import pygame.sprite
 from event import (
     Event,
     EventLoop,
@@ -20,13 +19,10 @@ def main():
 
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
+    loop.add_object(player.Player("0", (255, 0, 0), (0, 0)))
 
-    p = player.Player("0", (255, 0, 0), (0, 0))
-    plane = pygame.sprite.RenderUpdates(p)
     while True:
         loop.tick()
-        plane.draw(pygame.display.get_surface())
-        pygame.display.flip()
 
 if __name__ == '__main__':
     main()

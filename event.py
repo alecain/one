@@ -2,6 +2,10 @@ import sys
 
 import pygame
 from pygame.locals import *
+from pygame.sprite import (
+    RenderUpdates,
+    Sprite
+    )
 
 from locals import *
 
@@ -70,10 +74,13 @@ class EventLoop(object):
     def __init__(self):
         self.objs = []
         self.events = []
+        self.render = RenderUpdates()
 
     def add_object(self, obj):
         if isinstance(obj, HandlesEvents):
             self.objs.append(obj)
+        if isinstance(obj, Sprite):
+            self.render.add(obj)
 
     def enqueue(self, event):
         if isinstance(event, Event):
@@ -94,3 +101,5 @@ class EventLoop(object):
             elif event is not None and isinstance(event, TargettedEvent):
                 event.get_target().handle_event(event)
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
+        self.render.draw(pygame.display.get_surface())
+        pygame.display.flip()

@@ -6,13 +6,15 @@ from pygame.sprite import Sprite
 from locals import *
 
 from event import (
-    HandlesEvents
+    HandlesEvents,
+    QuitHandler
     )
 
 # represents a player...not necessarily ours though!
-class Player(Sprite, HandlesEvents):
+class Player(HandlesEvents, Sprite):
     def __init__(self, character, color, location):
-        super(Player, self).__init__()
+        HandlesEvents.__init__(self, [])
+        Sprite.__init__(self)
 
         self.character = character
         self.color = color
