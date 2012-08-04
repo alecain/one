@@ -49,7 +49,7 @@ class Event(object):
         self.payload = payload
 
     def __str__(self):
-        return self.payload
+        return "Event type: {0} Payload: {1}".format(type(self), self.payload)
 
     def get_payload(self):
         return self.payload
@@ -60,7 +60,7 @@ class TargettedEvent(Event):
         self.target = target
 
     def get_target(self):
-        return target
+        return self.target
 
 class PygameEvent(Event):
     def __init__(self, event):
