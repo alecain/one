@@ -3,6 +3,7 @@ from pygame import *
 
 
 from event import (
+    CleanupHandler,
     Event,
     EventLoop,
     PrintHandler,
@@ -37,6 +38,7 @@ def main():
     loop.add_object(PrintHandler())
     loop.add_object(QuitHandler())
     loop.add_object(WASDHandler(p))
+    loop.add_object(CleanupHandler())
     loop.add_object(p)
     loop.add_object(ProjectileCreationHandler())
     loop.add_object(MouseHandler())

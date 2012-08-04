@@ -4,8 +4,14 @@ import sys
 import pygame
 from pygame.locals import *
 from pygame.sprite import (
+    Group,
     RenderUpdates,
     Sprite
+    )
+
+from drawable import (
+    BGSprite,
+    Drawable
     )
 
 from locals import *
@@ -96,12 +102,28 @@ class UpdateHandler(PygameHandler):
         loop = get_loop()
         loop.enqueue(UpdateEvent(None))
 
+class CleanupHandler(HandlesEvents):
+    def __init__(self):
+        super(CleanupHandler, self).__init__([ UpdateEvent ])
+
+    def handle_event(self, event):
+        if isinstance(event, UpdateEvent):
+            loop = get_loop()
+            group = Group(loop.render.sprites())
+            for member in pygame.sprite.spritecollide(loop.bg_sprite, loop.render, False):
+                if member in group:
+                    group.remove(member)
+            for sprite in group:
+                print sprite
+                loop.rm_object(sprite)
+        
 
 class EventLoop(object):
     def __init__(self):
         self.objs = {}
         self.events = []
         self.render = RenderUpdates()
+        self.bg_sprite = BGSprite(pygame.display.get_surface())
 
         # Since we don't care about MOST EVENTS
         pygame.event.set_allowed(None)
@@ -122,6 +144,13 @@ class EventLoop(object):
                         self.objs[event] = [ obj ]
         if isinstance(obj, Sprite):
             self.render.add(obj)
+
+    def rm_object(self, obj):
+        for key in self.objs.keys():
+            self.render.remove(obj)
+            if obj in self.objs[key]:
+                self.objs[key].remove(obj)
+            print "Removed {0}".format(obj)
 
     def enqueue(self, event):
         if isinstance(event, Event):

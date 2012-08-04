@@ -1,7 +1,10 @@
 import pygame
 from pygame.font import Font
 from pygame.rect import Rect
-from pygame.sprite import DirtySprite
+from pygame.sprite import (
+    DirtySprite,
+    Sprite
+    )
 
 class Drawable(DirtySprite):
     def __init__(self, string, color, location, size):
@@ -22,3 +25,9 @@ class Drawable(DirtySprite):
         self.image = self._gen_surface()
         self.rect = Rect(self.location, self.image.get_size())
         self.dirty = 1
+
+class BGSprite(Sprite):
+    def __init__(self, surface):
+        super(BGSprite, self).__init__()
+        self.rect = surface.get_rect()
+        self.image = surface
