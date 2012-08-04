@@ -101,5 +101,8 @@ class EventLoop(object):
             elif event is not None and isinstance(event, TargettedEvent):
                 event.get_target().handle_event(event)
         map(lambda event: self.enqueue(PygameEvent(event)), pygame.event.get())
-        self.render.draw(pygame.display.get_surface())
-        pygame.display.flip()
+
+        self.render.clear(pygame.display.get_surface(), lambda surf, rect: surf.fill((0, 0, 0), rect))
+        rect_list = self.render.draw(pygame.display.get_surface())
+
+        pygame.display.update(rect_list)
