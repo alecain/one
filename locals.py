@@ -10,6 +10,7 @@ UPDATEEVENT = USEREVENT+1
 BULLET_SPEED = 1
 UPDATE_TIME = 30
 
+
 loop = None
 def get_loop():
     global loop
