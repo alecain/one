@@ -108,6 +108,6 @@ class SpawnHandler(PygameHandler):
         self.player = player
     def handle_event(self, event):
         loop = get_loop()
-        for i in range(1, random.randint(1,5)):
+        for i in range(1, random.randint(1,10)):
             e = AIPlayer("1", (0,0,255), (random.randint(1,RESX),random.randint(1,RESY)), self.player)
             loop.add_object(e, "enemy")

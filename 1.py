@@ -29,10 +29,9 @@ def main():
 
     pygame.time.set_timer(REDRAWEVENT,16)
     pygame.time.set_timer(UPDATEEVENT, UPDATE_TIME)
-    pygame.time.set_timer(SPAWNEVENT, 5000)
+    pygame.time.set_timer(SPAWNEVENT, 2500)
 
     p = player.HumanPlayer("0", (255, 0, 0), (0, 0))
-    e = player.AIPlayer("1", (0,0,255), (100,100), p)
 
     loop = get_loop()
     loop.add_object(RedrawHandler())
@@ -45,7 +44,6 @@ def main():
     loop.add_object(p, "you")
     loop.add_object(ProjectileCreationHandler())
     loop.add_object(MouseHandler())
-    loop.add_object(e, "enemy")
 
     while True:
         loop.tick()
