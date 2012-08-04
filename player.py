@@ -57,6 +57,7 @@ class HumanPlayer(Player):
             loop = get_loop()
             loop.enqueue(ProjectileCreationEvent(self.location, event.payload, self))
             self.shoot()
+            self.regen_sprite()
         super(HumanPlayer, self).handle_event(event)
 
 class AIPlayer(Player):
@@ -109,4 +110,4 @@ class SpawnHandler(PygameHandler):
         loop = get_loop()
         for i in range(1, random.randint(1,5)):
             e = AIPlayer("1", (0,0,255), (random.randint(1,RESX),random.randint(1,RESY)), self.player)
-            loop.add_object(e)
+            loop.add_object(e, "enemy")
